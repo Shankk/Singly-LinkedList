@@ -21,23 +21,27 @@ class LinkedList {
 
         let current = this.head
         for(let i = 0; i < index; i++) {
-            current = current.getNext()
+            current = current.next
         }
 
         return current
     }
 
     pop() {
-        if(this.getByIndex(this.length - 2) == null) {
+        let getTail = this.getByIndex(this.length - 2)
+        if(getTail == null) {
             this.head = null
             this.length--
         }
         else {
-            let getTail = this.getByIndex(this.length - 2)
             getTail.next = null
             this.length--
         }
-        
+    }
+
+    popFront() {
+        this.head = this.head.next
+        this.length--
     }
 
     contains(value) {
@@ -45,7 +49,7 @@ class LinkedList {
         if(current.value == value) return console.log("True")
 
         for(let i = 0; i < this.length-1; i++) {
-            current = current.getNext()
+            current = current.next
             if(current.value == value) return console.log("True")
         }
 
@@ -57,7 +61,7 @@ class LinkedList {
         if(current.value == value) return console.log("index: " + 0 + " value: " + current.value)
         
         for(let i = 0; i < this.length-1; i++) {
-            current = current.getNext()
+            current = current.next
             if(current.value == value) return console.log("index: " + (i+1) + " value: " + current.value)
         }
         return console.log("False/null")
@@ -74,25 +78,41 @@ class LinkedList {
         this.head = newNode
         this.length++
     }
+
+    toString() {
+        let output = ''
+        let current = this.head
+        while(current) {
+            output = `${output}${current.value} -> `
+            current = current.next
+        }
+        console.log(`${output}null`)
+    }
+
+    insertAtIndex(index,value) {
+        if(index === 0) return this.prepend(value)
+
+        const prev = this.getByIndex(index - 1)
+        if (prev == null) return null
+        prev.next = new Node(value, prev.next)
+        this.length++
+    }
+
+    removeAtIndex(index) {
+        if(index === 0) return this.popFront()
+
+        const prev = this.getByIndex(index - 1)
+        if (prev == null) return null
+        prev.next = prev.next.next
+
+        this.length--
+    }
 }
 
 class Node {
     constructor(value = null, next = null) {
         this.value = value
         this.next = next
-    }
-
-    getValue() {
-        return this.value
-    }
-    setValue(value) {
-        this.value = value
-    }
-    getNext() {
-        return this.next
-    }
-    setNext(value) {
-        this.next = value
     }
 }
 
